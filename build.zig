@@ -23,7 +23,7 @@ pub fn compileClay(b: *std.Build, target: std.Build.ResolvedTarget, optimize: st
         "-DCLAY_IMPLEMENTATION",
     };
 
-    const clayFile = b.path("clay.h");
+    const clayFile = b.path("clay.c");
     clay.addCSourceFile(.{ .file = clayFile, .flags = flags });
 
     return clay;
@@ -57,8 +57,10 @@ pub fn downloadClayHeader(b: *std.Build) !void {
             return;
         };
 
-        if (bytesRead == 0) return;
+        if (bytesRead == 0) break;
 
         _ = try out_file.write(buffer[0..bytesRead]);
     }
+
+    _ = try fs.copyFileAbsolute(header_dst, b.path("clay.c").getPath(b), .{});
 }
