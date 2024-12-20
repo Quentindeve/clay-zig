@@ -34,7 +34,8 @@ pub fn downloadClayHeader(b: *std.Build) !void {
     const fs = std.fs;
     const http = std.http;
 
-    const out_file = try fs.cwd().createFile("clay.h", .{});
+    const header_dst = b.path("clay.h").getPath(b);
+    const out_file = try fs.cwd().createFile(header_dst, .{});
     defer out_file.close();
 
     var buf: [8192]u8 = undefined;
